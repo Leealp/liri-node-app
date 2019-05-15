@@ -79,7 +79,7 @@ switch (command){
     }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-
+// error login: if no songs is provided, the output will be "Ace of Base"
 
  function errorConditionForSpotify() {
         spotify
@@ -101,6 +101,7 @@ switch (command){
     }
 
 //----------------------------------------------------------------------------------------------------------------------------------    
+//call to the OMB API for movies and display the output. If no movie for the entry
 
     function movieThis(movie) {
         axios.get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&tomatoes=true&apikey=trilogy").then(
