@@ -3,7 +3,7 @@ require("dotenv").config();
 var fs = require("fs");
 var moment = require('moment');
 var axios = require("axios");
-const keys = require("./keys.js");
+const keys = require("./key.js");
 const Spotify = require('node-spotify-api');
 let spotify = new Spotify(keys.spotify);
 
@@ -79,3 +79,64 @@ switch (command){
     }
 
 //---------------------------------------------------------------------------------------------------------------------------------
+
+
+ function errorConditionForSpotify() {
+        spotify
+        .search({ type: 'track', query: 'The Sign' })
+        .then(function(response) {
+            for (var i=0;i < response.tracks.items.length; i++) {
+                if (response.tracks.items[i].artists[0].name === "Ace of Base") {
+                    console.log("Artist: " + response.tracks.items[i].artists[0].name);
+                    console.log("Track: " + response.tracks.items[i].name);
+                    console.log("Preview URL: " + response.tracks.items[i].preview_url);
+                    console.log("Album: " + response.tracks.items[i].album.name);
+                    i = response.tracks.items.length;
+                }
+            }
+        }).catch(function (error) {  
+            console.log(error);
+            console.log("No Results found. ");
+      });
+    }
+
+//----------------------------------------------------------------------------------------------------------------------------------    
+
+    function movieThis(movie) {
+        axios.get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&tomatoes=true&apikey=trilogy").then(
+            function(response) {
+                //console.log(response.data);
+                if (response.data.Title != undefined) {
+                    console.log("Title: " + response.data.Title);
+                    console.log("Year: " + response.data.Year);
+                    console.log("imdbRating:: " + response.data.imdbRating);
+                    console.log("Title: " + response.data.Title);
+                    console.log("Country:: " + response.data.Country);
+                    console.log("Language:: " + response.data.Language);
+                    console.log("Plot: " + response.data.Plot);
+                    console.log("Actors: " + response.data.Actors);
+                    console.log("RottenTomatoes: " + response.data.tomatoRating);
+                } 
+                else {
+                    movieThis("Mr. Nobody");
+                }
+            }
+            // if response is empty call the api again with the "default" movie 
+        ).catch(function (error) {  
+            console.log(error);
+            console.log("No Results found. ");
+      });
+    }
+
+//------------------------------------------------------------------------------------------------------------------------------------    
+
+    function doRandom() {
+        fs.readFile("random.txt", "utf8", function(error, data) {
+            var dataArr = data.split(",");
+            spotifyThisSong(dataArr[1])
+            // If the code experiences any errors it will log the error to the console.
+            if (error) {
+              return console.log(error);
+            }
+        });
+    }
